@@ -23,40 +23,48 @@ public final class ButterKnife {
     }
 
     private static void injectViews(Object target, View source) {
-        for (Field field : target.getClass().getDeclaredFields()) {
-            BindView bindView = field.getAnnotation(BindView.class);
-            if (bindView != null) {
-                try {
-                    field.setAccessible(true);
-                    field.set(target, source.findViewById(bindView.value()));
-                } catch (Exception e) {
-                    throw new RuntimeException("Failed to bind view for field: " + field.getName(), e);
+        Class<?> clazz = target.getClass();
+        while (clazz != null) {
+            for (Field field : clazz.getDeclaredFields()) {
+                BindView bindView = field.getAnnotation(BindView.class);
+                if (bindView != null) {
+                    try {
+                        field.setAccessible(true);
+                        field.set(target, source.findViewById(bindView.value()));
+                    } catch (Exception e) {
+                        throw new RuntimeException("Failed to bind view for field: " + field.getName(), e);
+                    }
                 }
             }
+            clazz = clazz.getSuperclass();
         }
     }
 
     private static void injectClicks(final Object target, final View source) {
-        for (final Method method : target.getClass().getDeclaredMethods()) {
-            OnClick onClick = method.getAnnotation(OnClick.class);
-            if (onClick != null) {
-                for (int id : onClick.value()) {
-                    View view = source.findViewById(id);
-                    if (view != null) {
-                        view.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                try {
-                                    method.setAccessible(true);
-                                    method.invoke(target, v);
-                                } catch (Exception e) {
-                                    throw new RuntimeException("Failed to invoke @OnClick method: " + method.getName(), e);
+        Class<?> clazz = target.getClass();
+        while (clazz != null) {
+            for (final Method method : clazz.getDeclaredMethods()) {
+                OnClick onClick = method.getAnnotation(OnClick.class);
+                if (onClick != null) {
+                    for (int id : onClick.value()) {
+                        View view = source.findViewById(id);
+                        if (view != null) {
+                            view.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    try {
+                                        method.setAccessible(true);
+                                        method.invoke(target, v);
+                                    } catch (Exception e) {
+                                        throw new RuntimeException("Failed to invoke @OnClick method: " + method.getName(), e);
+                                    }
                                 }
-                            }
-                        });
+                            });
+                        }
                     }
                 }
             }
+            clazz = clazz.getSuperclass();
         }
     }
 }
