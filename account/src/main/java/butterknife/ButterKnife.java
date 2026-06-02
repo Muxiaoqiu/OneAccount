@@ -46,6 +46,9 @@ public final class ButterKnife {
             for (final Method method : clazz.getDeclaredMethods()) {
                 OnClick onClick = method.getAnnotation(OnClick.class);
                 if (onClick != null) {
+                    method.setAccessible(true);
+                    final boolean hasViewParam = method.getParameterTypes().length == 1
+                            && View.class.isAssignableFrom(method.getParameterTypes()[0]);
                     for (int id : onClick.value()) {
                         View view = source.findViewById(id);
                         if (view != null) {
@@ -53,8 +56,8 @@ public final class ButterKnife {
                                 @Override
                                 public void onClick(View v) {
                                     try {
-                                        method.setAccessible(true);
-                                        method.invoke(target, v);
+                                        if (hasViewParam) method.invoke(target, v);
+                                        else method.invoke(target);
                                     } catch (Exception e) {
                                         throw new RuntimeException("Failed to invoke @OnClick method: " + method.getName(), e);
                                     }
