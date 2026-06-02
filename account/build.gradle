@@ -2,20 +2,21 @@ apply plugin: 'com.android.application'
 apply plugin: 'org.greenrobot.greendao'
 
 android {
-    compileSdkVersion 29
-//    buildToolsVersion project.properties.ANDROID_BUILD_TOOLS_VERSION
+    namespace "com.loubii.account"
+    compileSdkVersion 34
 
     defaultConfig {
         applicationId "com.loubii.account"
-        minSdkVersion 14
-        targetSdkVersion 29
-        versionCode 1
-        versionName "1.0"
+        minSdkVersion 21
+        targetSdkVersion 34
+        versionCode 14
+        versionName "2.0.3"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         release {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
     compileOptions {
@@ -23,40 +24,42 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
-    greendao{
+    greendao {
         schemaVersion 4
         targetGenDir 'src/main/java'
         daoPackage 'com.loubii.account.db'
     }
-    // dataBinding 加入
-//    dataBinding {
-//        enabled = true
-//    }
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:25.3.1'
-    //compile 'com.ashokvarma.android:bottom-navigation-bar:2.0.2'
-    compile 'com.jakewharton:butterknife:8.8.0'
-    //添加这一句，不然会报错
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.0'
-    compile 'com.android.support:support-v4:25.3.1'
-    compile 'com.android.support:design:25.3.1'
-    compile 'com.marshalchen.ultimaterecyclerview:library:0.7.2'
-    compile 'com.github.zcweng:switch-button:0.0.3@aar'
-    compile 'com.android.support:cardview-v7:25.3.1'
-    compile 'me.relex:circleindicator:1.2.2@aar'
-    compile 'com.google.code.gson:gson:2.8.1'
-    compile 'org.greenrobot:eventbus:3.0.0'
-    //compile 'com.prolificinteractive:material-calendarview:1.4.3'
-    compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.22'
-    compile project(':library:pickerview')
-    compile project(':library:calendarLibrary')
-    compile project(':library:leafchart')
-    compile 'de.hdodenhof:circleimageview:2.2.0'
-    compile 'com.yanzhenjie:permission:1.1.2'
-    compile 'org.greenrobot:greendao:3.3.0'
-//    compile 'org.greenrobot:greendao-generator:3.2.2'
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    testImplementation 'junit:junit:4.13.2'
+
+    // AndroidX
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.cardview:cardview:1.0.0'
+    implementation 'androidx.recyclerview:recyclerview:1.3.1'
+    implementation 'androidx.viewpager:viewpager:1.0.0'
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
+    implementation 'androidx.drawerlayout:drawerlayout:1.2.0'
+    implementation 'androidx.annotation:annotation:1.7.0'
+
+    // Material Components
+    implementation 'com.google.android.material:material:1.10.0'
+
+    // Third-party
+    implementation 'com.github.zcweng:switch-button:0.0.3@aar'
+    implementation 'me.relex:circleindicator:1.2.2@aar'
+    implementation 'com.google.code.gson:gson:2.10.1'
+    implementation 'org.greenrobot:eventbus:3.3.1'
+    implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.50'
+    implementation 'de.hdodenhof:circleimageview:2.2.0'
+    implementation 'com.yanzhenjie:permission:1.1.2'
+    implementation 'org.greenrobot:greendao:3.3.0'
+
+    // Local modules
+    implementation project(':library:pickerview')
+    implementation project(':library:calendarLibrary')
+    implementation project(':library:leafchart')
 }

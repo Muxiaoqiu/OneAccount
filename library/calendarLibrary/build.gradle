@@ -1,50 +1,23 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 29
-//    buildToolsVersion project.properties.ANDROID_BUILD_TOOLS_VERSION
+    namespace "com.prolificinteractive.materialcalendarview"
+    compileSdkVersion 34
 
     defaultConfig {
-        minSdkVersion 14
-        targetSdkVersion 29
+        minSdkVersion 21
+        targetSdkVersion 34
         versionCode 1
         versionName "1.0"
     }
-
-//    lintOptions {
-//        abortOnError false
-//    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 dependencies {
-    compile 'com.android.support:support-v4:25.3.1'
-    compile "com.android.support:support-annotations:25.3.1"
-
-//    rootProject.ext.testDep.each { testCompile it }
-//    rootProject.ext.androidTestDep.each { androidTestCompile it }
+    api 'androidx.legacy:legacy-support-v4:1.0.0'
+    api 'androidx.viewpager:viewpager:1.0.0'
+    implementation 'androidx.annotation:annotation:1.7.0'
 }
-
-//tasks.withType(Javadoc) {
-//    options.addStringOption('Xdoclint:none', '-quiet')
-//    options.addStringOption('encoding', 'UTF-8')
-//    options.addStringOption('charSet', 'UTF-8')
-//}
-//
-//android.libraryVariants.all { variant ->
-//    task("generate${variant.name.capitalize()}Javadoc", type: Javadoc) {
-//        title "Material CalendarView ${version}"
-//        description "Generates Javadoc for $variant.name."
-//        source = variant.javaCompile.source
-//        classpath = files(variant.javaCompile.classpath.files, project.android.getBootClasspath())
-//        exclude '**/BuildConfig.java'
-//        exclude '**/R.java'
-//        exclude 'android/support/v4/view/BetterViewPager.java'
-//        options {
-//            links "http://docs.oracle.com/javase/7/docs/api/"
-//            linksOffline "http://d.android.com/reference", "${android.sdkDirectory}/docs/reference"
-//        }
-//    }
-//}
-//
-//
-//apply from: 'https://raw.github.com/chrisbanes/gradle-mvn-push/master/gradle-mvn-push.gradle'

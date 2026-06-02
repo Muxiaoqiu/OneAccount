@@ -1,7 +1,7 @@
 package com.loubii.account.ui.fragments.adapter;
 
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import android.view.ViewGroup;
 
 import java.util.List;
@@ -10,7 +10,7 @@ import java.util.List;
  * Created by jingbin on 2016/12/6.
  */
 
-public class BaseFragmentPagerAdapter extends android.support.v4.app.FragmentPagerAdapter {
+public class BaseFragmentPagerAdapter extends androidx.fragment.app.FragmentPagerAdapter {
 
     private List<?> mFragment;
     private List<String> mTitleList;

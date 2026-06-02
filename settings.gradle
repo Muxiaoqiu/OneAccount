@@ -1,4 +1,4 @@
-include ':app', ':account'
+include ':account'
 include ':library:pickerview'
 include ':library:calendarLibrary'
 include ':library:leafchart'

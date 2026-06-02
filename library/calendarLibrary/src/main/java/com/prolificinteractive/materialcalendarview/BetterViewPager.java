@@ -1,6 +1,7 @@
-package android.support.v4.view;
+package com.prolificinteractive.materialcalendarview;
 
 import android.content.Context;
+import androidx.viewpager.widget.ViewPager;
 import android.util.AttributeSet;
 
 /**
@@ -17,7 +18,6 @@ public class BetterViewPager extends ViewPager {
         super(context, attrs);
     }
 
-    @Override
     public void setChildrenDrawingOrderEnabledCompat(boolean enable) {
         setChildrenDrawingOrderEnabled(enable);
     }

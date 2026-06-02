@@ -1,6 +1,6 @@
 package com.loubii.account.adapter;
 
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,8 +8,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.marshalchen.ultimaterecyclerview.UltimateRecyclerviewViewHolder;
-import com.marshalchen.ultimaterecyclerview.UltimateViewAdapter;
 import com.loubii.account.R;
 import com.loubii.account.bean.AccountModel;
 import com.loubii.account.util.TimeUtil;
@@ -18,12 +16,10 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-/**
- *
- * @author luo
- * @date 2017/8/14
- */
-public class BillAdapter extends UltimateViewAdapter {
+public class BillAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements StickyHeaderAdapter {
+
+    private static final int TYPE_ITEM = 0;
+    private static final int TYPE_HEADER = 1;
 
     private List<AccountModel> mAccountList;
     private OnItemClickListener mItemClickListener;
@@ -33,159 +29,126 @@ public class BillAdapter extends UltimateViewAdapter {
     }
 
     @Override
-    public RecyclerView.ViewHolder newFooterHolder(View view) {
-        return new UltimateRecyclerviewViewHolder<>(view);
+    public int getItemViewType(int position) {
+        if (position == 0 || getHeaderId(position) != getHeaderId(position - 1))
+            return TYPE_HEADER;
+        return TYPE_ITEM;
     }
 
     @Override
-    public RecyclerView.ViewHolder newHeaderHolder(View view) {
-
-        return new UltimateRecyclerviewViewHolder<>(view);
-    }
-
-    @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent) {
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        if (viewType == TYPE_HEADER) {
+            View view = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.item_stick_header, parent, false);
+            return new HeaderHolder(view);
+        }
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_bill_list, parent, false);
-        ItemHoleder vh = new ItemHoleder(v);
-        return vh;
-    }
-
-    @Override
-    public int getAdapterItemCount() {
-        return mAccountList.size();
-    }
-
-    @Override
-    public long generateHeaderId(int position) {
-        //Logger.e(calendar.get(Calendar.DAY_OF_MONTH) + "--->" + position);
-        return getDay(mAccountList.get(position).getTime()) ;
-    }
-
-    private long getDay(Date time) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(time);
-        return calendar.get(Calendar.DAY_OF_MONTH);
+        return new ItemHolder(v);
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-//        Logger.e("normal: " + super.getItemViewType(position));
-//        if (super.getItemViewType(position) == VIEW_TYPES.HEADER)
+        if (holder instanceof ItemHolder) {
+            ItemHolder h = (ItemHolder) holder;
+            h.itemView.setTag(position);
+            float count = mAccountList.get(position).getCount();
+            int type = mAccountList.get(position).getOutIntype();
+            String note = mAccountList.get(position).getNote();
+            String remark = mAccountList.get(position).getRemark();
+            if (type == 1) count = -count;
+            h.tvClassifyMoney.setText(count + "");
+            h.tvClassify.setText(mAccountList.get(position).getDetailType());
+            h.ivClassify.setImageResource(mAccountList.get(position).getPicRes());
+            if (TextUtils.isEmpty(note) && TextUtils.isEmpty(remark)) {
+                h.tvClassifyDescribe.setVisibility(View.GONE);
+            } else
+                h.tvClassifyDescribe.setText(note + "," + remark);
+        } else if (holder instanceof HeaderHolder) {
+            HeaderHolder h = (HeaderHolder) holder;
+            String time = TimeUtil.date2String(mAccountList.get(position).getTime(), "MM月dd日");
+            String week = TimeUtil.getWeekByDate(mAccountList.get(position).getTime());
+            h.tvStickyDay.setText(time);
+            h.tvStickyWeek.setText(week);
+            float sumExpend = 0f, sumIncome = 0f;
+            for (int i = position; i < mAccountList.size(); i++) {
+                Date date = mAccountList.get(i).getTime();
+                if (getDay(date) == getHeaderId(position)) {
+                    int t = mAccountList.get(i).getOutIntype();
+                    if (t == 1) sumExpend += mAccountList.get(i).getCount();
+                    if (t == 2) sumIncome += mAccountList.get(i).getCount();
+                } else break;
+            }
+            h.tvStickyExpend.setText("支出：" + sumExpend);
+            h.tvStickyIncome.setText("收入：" + sumIncome);
+        }
+    }
 
-        ((ItemHoleder) holder).itemView.setTag(position);
-        ItemHoleder itemHoleder = (ItemHoleder) holder;
-        float count = mAccountList.get(position).getCount();
-        int type = mAccountList.get(position).getOutIntype();
-        String note = mAccountList.get(position).getNote();
-        String remark = mAccountList.get(position).getRemark();
-        if (type == 1)
-            count = -count;
-        itemHoleder.tvClassifyMoney.setText(count + "");
-        itemHoleder.tvClassify.setText(mAccountList.get(position).getDetailType());
-        itemHoleder.ivClassify.setImageResource(mAccountList.get(position).getPicRes());
-        if ( TextUtils.isEmpty(note) && TextUtils.isEmpty(remark)) {
-            itemHoleder.tvClassifyDescribe.setVisibility(View.GONE);
-        } else
-            itemHoleder.tvClassifyDescribe.setText(note + "," +remark);
+    @Override
+    public int getItemCount() { return mAccountList.size(); }
 
+    @Override
+    public long getHeaderId(int position) {
+        return getDay(mAccountList.get(position).getTime());
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateHeaderViewHolder(ViewGroup parent) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_stick_header, parent, false);
-        return new HeaderHoleder(view);
+        return new HeaderHolder(view);
     }
 
     @Override
     public void onBindHeaderViewHolder(RecyclerView.ViewHolder holder, int position) {
-
-        //Logger.e("header: " + getItemViewType(position));
-        HeaderHoleder headerHoleder = (HeaderHoleder) holder;
+        HeaderHolder h = (HeaderHolder) holder;
         String time = TimeUtil.date2String(mAccountList.get(position).getTime(), "MM月dd日");
         String week = TimeUtil.getWeekByDate(mAccountList.get(position).getTime());
-        headerHoleder.tvStickyDay.setText(time);
-        headerHoleder.tvStickyWeek.setText(week);
-        //Logger.e(generateHeaderId(position)+ "  -- > " + position);
-        float sumExpend = 0f;
-        float sumIncome = 0f;
+        h.tvStickyDay.setText(time);
+        h.tvStickyWeek.setText(week);
+        float sumExpend = 0f, sumIncome = 0f;
         for (int i = position; i < mAccountList.size(); i++) {
             Date date = mAccountList.get(i).getTime();
-            //从当前day往后循环判断，如果day相同则表示为同一天，否则跳出循环
-            if (getDay(date) == generateHeaderId(position)) {
-                int type = mAccountList.get(i).getOutIntype();
-                if (type == 1) //支出
-                    sumExpend += mAccountList.get(i).getCount();
-                if (type == 2) //收入
-                    sumIncome += mAccountList.get(i).getCount();
-            } else
-                break;
+            if (getDay(date) == getHeaderId(position)) {
+                int t = mAccountList.get(i).getOutIntype();
+                if (t == 1) sumExpend += mAccountList.get(i).getCount();
+                if (t == 2) sumIncome += mAccountList.get(i).getCount();
+            } else break;
         }
-        headerHoleder.tvStickyExpend.setText("支出：" + sumExpend);
-        headerHoleder.tvStickyIncome.setText("收入：" + sumIncome);
-
+        h.tvStickyExpend.setText("支出：" + sumExpend);
+        h.tvStickyIncome.setText("收入：" + sumIncome);
     }
 
-    public interface OnItemClickListener {
-        void onItemClick(View view, int position);
+    private long getDay(Date time) {
+        Calendar c = Calendar.getInstance(); c.setTime(time);
+        return c.get(Calendar.DAY_OF_MONTH);
     }
 
-    /**
-     * 设置Item点击监听
-     * @param listener
-     */
-    public void setOnItemClickListener(OnItemClickListener listener) {
-        this.mItemClickListener = listener;
+    public interface OnItemClickListener { void onItemClick(View view, int position); }
+    public void setOnItemClickListener(OnItemClickListener l) { this.mItemClickListener = l; }
+
+    class ItemHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        ImageView ivClassify; TextView tvClassify, tvClassifyDescribe, tvClassifyMoney; View itemBill;
+        ItemHolder(View v) {
+            super(v);
+            ivClassify = v.findViewById(R.id.iv_classify);
+            tvClassify = v.findViewById(R.id.tv_classify);
+            tvClassifyDescribe = v.findViewById(R.id.tv_classify_describe);
+            tvClassifyMoney = v.findViewById(R.id.tv_classify_money);
+            itemBill = v.findViewById(R.id.item_bill);
+            v.setOnClickListener(this);
+        }
+        @Override public void onClick(View v) { if (mItemClickListener != null) mItemClickListener.onItemClick(v, (int)v.getTag()); }
     }
 
-    class ItemHoleder extends UltimateRecyclerviewViewHolder implements View.OnClickListener {
-
-        ImageView ivClassify;
-        TextView tvClassify;
-        TextView tvClassifyDescribe;
-        TextView tvClassifyMoney;
-        View itemBill;
-
-        public ItemHoleder(View itemView) {
-            super(itemView);
-            ivClassify = (ImageView) itemView.findViewById(
-                    R.id.iv_classify);
-            tvClassify = (TextView) itemView.findViewById(R.id.tv_classify);
-            tvClassifyDescribe = (TextView) itemView.findViewById(R.id.tv_classify_describe);
-            tvClassifyMoney = (TextView) itemView.findViewById(R.id.tv_classify_money);
-            itemBill = itemView.findViewById(R.id.item_bill);
-            itemView.setOnClickListener(this);
-        }
-
-        @Override
-        public void onClick(View v) {
-            mItemClickListener.onItemClick(v, (int) v.getTag());
+    class HeaderHolder extends RecyclerView.ViewHolder {
+        TextView tvStickyDay, tvStickyWeek, tvStickyExpend, tvStickyIncome;
+        HeaderHolder(View v) {
+            super(v);
+            tvStickyDay = v.findViewById(R.id.tv_sticky_day);
+            tvStickyWeek = v.findViewById(R.id.tv_sticky_week);
+            tvStickyExpend = v.findViewById(R.id.tv_sticky_expend);
+            tvStickyIncome = v.findViewById(R.id.tv_sticky_income);
         }
     }
-
-
-    class HeaderHoleder extends UltimateRecyclerviewViewHolder implements View.OnClickListener {
-
-        TextView tvStickyDay;
-        TextView tvStickyWeek;
-        TextView tvStickyExpend;
-        TextView tvStickyIncome;
-
-        public HeaderHoleder(View itemView) {
-            super(itemView);
-            tvStickyDay = (TextView) itemView.findViewById(R.id.tv_sticky_day);
-            tvStickyWeek = (TextView) itemView.findViewById(R.id.tv_sticky_week);
-            tvStickyExpend = (TextView) itemView.findViewById(R.id.tv_sticky_expend);
-            tvStickyIncome = (TextView) itemView.findViewById(R.id.tv_sticky_income);
-            itemView.setOnClickListener(this);
-        }
-
-        @Override
-        public void onClick(View v) {
-            mItemClickListener.onItemClick(v, (int) v.getTag());
-        }
-    }
-
-
 }

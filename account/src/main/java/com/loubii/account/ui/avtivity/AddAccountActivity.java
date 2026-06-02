@@ -2,7 +2,7 @@ package com.loubii.account.ui.avtivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.view.ViewPager;
+import androidx.viewpager.widget.ViewPager;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.view.LayoutInflater;

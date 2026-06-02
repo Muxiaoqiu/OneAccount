@@ -9,7 +9,7 @@
     android:background="@color/colorTextWhite"
     tools:context="com.loubii.account.ui.avtivity.AddSortActivity">
 
-    <!--<android.support.v7.widget.Toolbar-->
+    <!--<androidx.appcompat.widget.Toolbar-->
         <!--android:id="@+id/toolbar"-->
         <!--android:layout_width="match_parent"-->
         <!--android:layout_height="?attr/actionBarSize"-->
@@ -22,11 +22,11 @@
             <!--layout="@layout/layout_toolbar_expend_income"-->
             <!--android:layout_width="match_parent"-->
             <!--android:layout_height="match_parent"/>-->
-    <!--</android.support.v7.widget.Toolbar>-->
+    <!--</androidx.appcompat.widget.Toolbar>-->
 
     <include layout="@layout/layout_toolbar_header_title"/>
 
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_sort"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -34,7 +34,7 @@
         android:clipChildren="false"
         android:clipToPadding="false">
 
-    </android.support.v7.widget.RecyclerView>
+    </androidx.recyclerview.widget.RecyclerView>
 
 
 </LinearLayout>

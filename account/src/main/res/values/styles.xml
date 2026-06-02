@@ -5,7 +5,7 @@
     <style name="AppTheme" parent="MyThemeRed" />
 
     <!-- 深色为主色调 -->
-    <style name="MyThemeRed" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="MyThemeRed" parent="Theme.MaterialComponents.Light.NoActionBar">
 
         <!--选中状态icon的颜色和字体颜色-->
         <item name="colorPrimary">@color/colorPrimary</item>
@@ -15,10 +15,10 @@
         <!--<item name="android:textColorPrimary">@color/colorTheme</item>-->
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar" />
 
     <!--titleBar样式-->
-    <style name="ToolbarStyle" parent="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+    <style name="ToolbarStyle" parent="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar">
         <item name="actionBarItemBackground">@drawable/toolbarItemBackground</item>
         <item name="selectableItemBackground">@drawable/toolbarItemBackground</item>
         <item name="titleTextAppearance">@style/ToolBar.Title</item>
@@ -28,13 +28,13 @@
     </style>
 
     <!--titlebar 标题-->
-    <style name="ToolBar.Title" parent="@style/TextAppearance.Widget.AppCompat.Toolbar.Title">
+    <style name="ToolBar.Title" parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Title">
         <item name="android:textSize">18dp</item>
         <item name="android:textColor">@color/colorTextWhite</item>
     </style>
 
     <!--titlebar 副标题-->
-    <style name="Toolbar.SubTitle" parent="@style/TextAppearance.Widget.AppCompat.Toolbar.Subtitle">
+    <style name="Toolbar.SubTitle" parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Subtitle">
         <item name="android:textSize">9.0dp</item>
         <item name="android:textColor">#99ffffff</item>
     </style>
@@ -52,7 +52,7 @@
 
 
     <!--备注dialog 样式-->
-    <style name="quick_option_dialog" parent="@style/Theme.AppCompat.Dialog">
+    <style name="quick_option_dialog" parent="@style/Theme.MaterialComponents.Light.Dialog">
         <item name="android:windowBackground">@color/white40</item>
         <!--<item name="android:windowAnimationStyle">@style/dialog_animation</item>-->
     </style>

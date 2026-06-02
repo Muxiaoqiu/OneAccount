@@ -1,5 +1,10 @@
 # OneAccount
 一款简约风格的记账app
+
+> **原始项目来源**: [LouBii/OneAccount](https://github.com/LouBii/OneAccount)
+>
+> 本项目基于原项目进行了现代化迁移升级：AndroidX 迁移、Gradle 8.7 + AGP 8.2.2、JDK 17 兼容、UltimateRecyclerView 替换为标准组件、ButterKnife 替换为运行时反射实现。
+
 ## Preview
 <img src="https://github.com/LouBii/OneAccount/blob/master/pic/gif1.gif" width="270"/> <img src="https://github.com/LouBii/OneAccount/blob/master/pic/gif2.gif" width="270"/> <img src="https://github.com/LouBii/OneAccount/blob/master/pic/gif3.gif" width="270"/>
 ## Screenshots

@@ -3,8 +3,7 @@
               android:layout_width="match_parent"
               android:layout_height="wrap_content">
 
-    <com.marshalchen.ultimaterecyclerview.swipe.SwipeLayout
-        android:id="@id/recyclerview_swipe"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <LinearLayout
@@ -70,7 +69,7 @@
                 android:textSize="15sp"
                 android:text="29.00"/>
         </RelativeLayout>
-    </com.marshalchen.ultimaterecyclerview.swipe.SwipeLayout>
+    </FrameLayout>
     
 
 
