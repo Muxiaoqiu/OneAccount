@@ -20,10 +20,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-public class BillSwipeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements StickyHeaderAdapter {
-
-    private static final int TYPE_ITEM = 0;
-    private static final int TYPE_HEADER = 1;
+public class BillSwipeAdapter extends RecyclerView.Adapter<BillSwipeAdapter.ItemHolder> implements StickyHeaderAdapter {
 
     private List<AccountModel> mAccountList;
     private OnDeleteListener mDeleteListener;
@@ -33,56 +30,24 @@ public class BillSwipeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
     @Override
-    public int getItemViewType(int position) {
-        if (position == 0 || getHeaderId(position) != getHeaderId(position - 1))
-            return TYPE_HEADER;
-        return TYPE_ITEM;
-    }
-
-    @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        if (viewType == TYPE_HEADER) {
-            View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.item_stick_header, parent, false);
-            return new HeaderHolder(view);
-        }
+    public ItemHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_bill_list_swipe, parent, false);
         return new ItemHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        if (holder instanceof ItemHolder) {
-            ItemHolder h = (ItemHolder) holder;
-            float count = mAccountList.get(position).getCount();
-            String note = mAccountList.get(position).getNote();
-            String remark = mAccountList.get(position).getRemark();
-            h.tvClassifyMoney.setText(count + "");
-            h.tvClassify.setText(mAccountList.get(position).getDetailType());
-            h.ivClassify.setImageResource(mAccountList.get(position).getPicRes());
-            if (TextUtils.isEmpty(note) && TextUtils.isEmpty(remark)) {
-                h.tvClassifyDescribe.setVisibility(View.GONE);
-            } else {
-                h.tvClassifyDescribe.setText(note + "," + remark);
-            }
-        } else if (holder instanceof HeaderHolder) {
-            HeaderHolder h = (HeaderHolder) holder;
-            String time = TimeUtil.date2String(mAccountList.get(position).getTime(), "MM月dd日");
-            String week = TimeUtil.getWeekByDate(mAccountList.get(position).getTime());
-            h.tvStickyDay.setText(time);
-            h.tvStickyWeek.setText(week);
-            float sumMoney = 0f;
-            for (int i = position; i < mAccountList.size(); i++) {
-                Date date = mAccountList.get(i).getTime();
-                if (getDay(date) == getHeaderId(position)) {
-                    sumMoney += mAccountList.get(i).getCount();
-                } else break;
-            }
-            int type = mAccountList.get(position).getOutIntype();
-            String strType = (type == 1) ? "支出：" + sumMoney : "收入：" + sumMoney;
-            h.tvStickyExpend.setVisibility(View.GONE);
-            h.tvStickyIncome.setText(strType);
+    public void onBindViewHolder(ItemHolder h, int position) {
+        float count = mAccountList.get(position).getCount();
+        String note = mAccountList.get(position).getNote();
+        String remark = mAccountList.get(position).getRemark();
+        h.tvClassifyMoney.setText(count + "");
+        h.tvClassify.setText(mAccountList.get(position).getDetailType());
+        h.ivClassify.setImageResource(mAccountList.get(position).getPicRes());
+        if (TextUtils.isEmpty(note) && TextUtils.isEmpty(remark)) {
+            h.tvClassifyDescribe.setVisibility(View.GONE);
+        } else {
+            h.tvClassifyDescribe.setText(note + "," + remark);
         }
     }
 

@@ -16,10 +16,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-public class BillAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements StickyHeaderAdapter {
-
-    private static final int TYPE_ITEM = 0;
-    private static final int TYPE_HEADER = 1;
+public class BillAdapter extends RecyclerView.Adapter<BillAdapter.ItemHolder> implements StickyHeaderAdapter {
 
     private List<AccountModel> mAccountList;
     private OnItemClickListener mItemClickListener;
@@ -29,59 +26,27 @@ public class BillAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
     }
 
     @Override
-    public int getItemViewType(int position) {
-        if (position == 0 || getHeaderId(position) != getHeaderId(position - 1))
-            return TYPE_HEADER;
-        return TYPE_ITEM;
-    }
-
-    @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        if (viewType == TYPE_HEADER) {
-            View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.item_stick_header, parent, false);
-            return new HeaderHolder(view);
-        }
+    public ItemHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_bill_list, parent, false);
         return new ItemHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        if (holder instanceof ItemHolder) {
-            ItemHolder h = (ItemHolder) holder;
-            h.itemView.setTag(position);
-            float count = mAccountList.get(position).getCount();
-            int type = mAccountList.get(position).getOutIntype();
-            String note = mAccountList.get(position).getNote();
-            String remark = mAccountList.get(position).getRemark();
-            if (type == 1) count = -count;
-            h.tvClassifyMoney.setText(count + "");
-            h.tvClassify.setText(mAccountList.get(position).getDetailType());
-            h.ivClassify.setImageResource(mAccountList.get(position).getPicRes());
-            if (TextUtils.isEmpty(note) && TextUtils.isEmpty(remark)) {
-                h.tvClassifyDescribe.setVisibility(View.GONE);
-            } else
-                h.tvClassifyDescribe.setText(note + "," + remark);
-        } else if (holder instanceof HeaderHolder) {
-            HeaderHolder h = (HeaderHolder) holder;
-            String time = TimeUtil.date2String(mAccountList.get(position).getTime(), "MM月dd日");
-            String week = TimeUtil.getWeekByDate(mAccountList.get(position).getTime());
-            h.tvStickyDay.setText(time);
-            h.tvStickyWeek.setText(week);
-            float sumExpend = 0f, sumIncome = 0f;
-            for (int i = position; i < mAccountList.size(); i++) {
-                Date date = mAccountList.get(i).getTime();
-                if (getDay(date) == getHeaderId(position)) {
-                    int t = mAccountList.get(i).getOutIntype();
-                    if (t == 1) sumExpend += mAccountList.get(i).getCount();
-                    if (t == 2) sumIncome += mAccountList.get(i).getCount();
-                } else break;
-            }
-            h.tvStickyExpend.setText("支出：" + sumExpend);
-            h.tvStickyIncome.setText("收入：" + sumIncome);
-        }
+    public void onBindViewHolder(ItemHolder h, int position) {
+        h.itemView.setTag(position);
+        float count = mAccountList.get(position).getCount();
+        int type = mAccountList.get(position).getOutIntype();
+        String note = mAccountList.get(position).getNote();
+        String remark = mAccountList.get(position).getRemark();
+        if (type == 1) count = -count;
+        h.tvClassifyMoney.setText(count + "");
+        h.tvClassify.setText(mAccountList.get(position).getDetailType());
+        h.ivClassify.setImageResource(mAccountList.get(position).getPicRes());
+        if (TextUtils.isEmpty(note) && TextUtils.isEmpty(remark)) {
+            h.tvClassifyDescribe.setVisibility(View.GONE);
+        } else
+            h.tvClassifyDescribe.setText(note + "," + remark);
     }
 
     @Override
