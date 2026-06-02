@@ -25,7 +25,6 @@
         <!-- <activity -->
         <!-- android:name=".ui.avtivity.BaseActivity" -->
         <!-- android:theme="@style/AppTheme"/> -->
-        <activity android:name="com.loubii.account.ui.avtivity.MainActivity"/>
         <activity android:name="com.loubii.account.ui.avtivity.BillDetailActivity">
         </activity>
         <activity android:name="com.loubii.account.ui.avtivity.BudgetActivity">
@@ -37,34 +36,6 @@
         <activity android:name="com.loubii.account.ui.avtivity.AddUserDefineActivity">
         </activity>
         <activity android:name="com.loubii.account.ui.avtivity.CalendarActivity">
-        </activity>
-        <activity android:name="com.loubii.account.ui.card.CardAddActivity">
-        </activity>
-        <activity android:name="com.loubii.account.ui.card.CardBelongActivity">
-        </activity>
-        <activity android:name="com.loubii.account.ui.card.TransferActivity">
-        </activity>
-        <activity android:name="com.loubii.account.ui.avtivity.BalanceActivity">
-        </activity>
-        <activity android:name="com.loubii.account.ui.card.CardDetailActivity">
-        </activity>
-        <activity android:name="com.loubii.account.ui.card.CardRemindActivity">
-        </activity>
-
-        <receiver
-            android:name="com.loubii.account.receiver.AlarmReceiver"
-            android:enabled="true"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="com.xywallet.xyhd.alarm"/>
-            </intent-filter>
-        </receiver>
-
-        <activity android:name="com.loubii.account.ui.avtivity.RemindManagerActivity">
-        </activity>
-        <activity android:name="com.loubii.account.ui.avtivity.AccountRemindActivity">
-        </activity>
-        <activity android:name="com.loubii.account.ui.avtivity.AccountRemindAddActivity">
         </activity>
         <activity android:name="com.loubii.account.ui.avtivity.NewContractActivity">
         </activity>

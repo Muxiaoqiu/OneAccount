@@ -2,12 +2,9 @@ package com.loubii.account.ui;
 
 import com.loubii.account.R;
 import com.loubii.account.ui.fragments.FragmentBill;
-import com.loubii.account.ui.fragments.FragmentCard;
-import com.loubii.account.ui.fragments.FragmentCenter;
 import com.loubii.account.ui.fragments.FragmentChart;
 
 public enum MainTab {
-
 
     BILL(0, R.string.tab_name_bill, R.drawable.tab_bill_selector,
          FragmentBill.class),
@@ -16,13 +13,7 @@ public enum MainTab {
           FragmentChart.class),
 
     ADD(2, R.string.tab_name_add, R.drawable.tab_add_selector,
-           null),
-
-    CARD(3, R.string.tab_name_card, R.drawable.tab_card_selector,
-            FragmentCard.class),
-
-    ME(4, R.string.tab_name_me, R.drawable.tab_me_selector,
-       FragmentCenter.class);
+           null);
 
     private int idx;
     private int resName;
